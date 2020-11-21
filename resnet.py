@@ -143,7 +143,7 @@ def train(model, dir_name_train):
     :return: Optionally list of losses per batch to use for visualize_loss
     '''
     dir_path_train = dir_name_train  +'/*.jpg'
-    dataset = tf.data.Dataset.list_files(dir_path_train)
+    dataset = tf.data.Dataset.list_files(dir_path_train,shuffle=False)
     dataset.map(map_func=load_and_process_image,num_parallel_calls = 8)
     dataset = dataset.batch(model.batch_size,drop_remainder=True)
     dataset = dataset.prefecth(1)
@@ -168,17 +168,19 @@ def test(model, dir_name_test):
     all batches
     """
     dir_path_test = dir_name_train  +'/*.jpg'
-    dataset = tf.data.Dataset.list_files(dir_path_test)
+    dataset = tf.data.Dataset.list_files(dir_path_test,shuffle=False)
     dataset.map(map_func=load_and_process_image,num_parallel_calls = 8)
     dataset = dataset.batch(model.batch_size,drop_remainder=True)
     dataset = dataset.prefecth(1)
     test_labels =get_labels
-    total_accuracy = 
+    total_accuracy = tf.convert_to_tensor(0,dtype=tf.float64)
     for i, bacth in enumerate(dataset):
         logits = model.call(batch,is_testing = True)
         accuracy = model.accuracy(logits,test_labels)
-    print("test accuracy",accuracy)
-    return accuracy
+        print("test accuracy",accuracy)
+        total_accuracy+=accuracy 
+    average_accuracy = total_accuracy/(i+1)
+    return average_accuracy 
 
 
 def main():
@@ -195,8 +197,14 @@ def main():
     
     :return: None
     '''
-    X_train, y_train, X_test, y_test = load_cifar10_dataset(shape=(-1, 32, 32, 3), plotable=False)
-        
+    model = ResNet18()
+    num_epochs =10
+    train_dir =""
+    test_dir =""
+    for i in range(num_epochs):
+        model.train(train_dir)
+        accuarcy = model.test(test_dir) 
+    print("accuarcy after 10 epochs:",accuaracy)   
     return
 
 
