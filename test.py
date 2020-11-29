@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 from preprocess import get_data
 from myplain16 import Plain16
-from myplain16 import Model
 
 import random
 

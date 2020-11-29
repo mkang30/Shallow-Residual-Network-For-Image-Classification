@@ -13,12 +13,12 @@ develop-eggs/
 dist/
 downloads/
 eggs/
+env/
 .eggs/
 lib/
 lib64/
 parts/
 sdist/
-env/
 var/
 wheels/
 pip-wheel-metadata/
@@ -128,4 +128,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
->>>>>>> 3cb6c39eb77d2e0975184c5b7fabd7bc5390c707

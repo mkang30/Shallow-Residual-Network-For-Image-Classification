@@ -16,8 +16,8 @@ def initialize_variable(name,shape,initializer,trainable=True):
 class  ResNet18(tf.keras.Model):
     def __init__(self,num_classes,batch_size):
         """
-        This model class will contain the architecture for your CNN that 
-        classifies images. Do not modify the constructor, as doing so 
+        This model class will contain the architecture for your CNN that
+        classifies images. Do not modify the constructor, as doing so
         will break the autograder. We have left in variables in the constructor
         for you to fill out, but you are welcome to change them if you'd like.
         """
@@ -39,7 +39,7 @@ class  ResNet18(tf.keras.Model):
         # parameters for conv3_x
         self.conv3_filter_size =3
         self.conv3_num_outputs = 128
-        self.conv3_num_layers =2 
+        self.conv3_num_layers =2
         # parameters for conv4_x
         self.conv4_filter_size = 3
         self.conv4_num_outputs = 256
@@ -50,9 +50,9 @@ class  ResNet18(tf.keras.Model):
         self.conv5_num_layers = 2
         ## paramters for ave_pool
         self.ave_pool_size = 7
-        
+
         # denselayer hyperparameters
-        self.dense_output_size = self.num_classes 
+        self.dense_output_size = self.num_classes
         # TODO: Initialize all layers
         self.conv1 = tf.keras.layers.Conv2D(self.conv1_num_outputs,self.conv1_filter_size,3,padding='SAME')
         self.conv2 = block();
@@ -73,7 +73,6 @@ class  ResNet18(tf.keras.Model):
         # shape of input = (num_inputs (or batch_size), in_height, in_width, in_channels)
         # shape of filter = (filter_height, filter_width, in_channels, out_channels)
         # shape of strides = (batch_stride, height_stride, width_stride, channels_stride)
-        
         #conv layer 1
         output_conv_1 = tf.nn.conv2d(inputs,self.filter_conv_layer1, self.stride_layer1, self.padding)
         mean_1, variance_1 = tf.nn.moments( output_conv_1,axes = [0,1,2],keep_dims=False)
@@ -95,13 +94,13 @@ class  ResNet18(tf.keras.Model):
         ## input to dense
         probs  = self.dense(after_flatten)
         return probs
-        
-        
+
+
 
     def loss(self, logits, labels):
         """
         Calculates the model cross-entropy loss after one forward pass.
-        :param logits: during training, a matrix of shape (batch_size, self.num_classes) 
+        :param logits: during training, a matrix of shape (batch_size, self.num_classes)
         containing the result of multiple convolution and feed forward layers
         Softmax is applied in this function.
         :param labels: during training, matrix of shape (batch_size, self.num_classes) containing the train labels
@@ -121,9 +120,8 @@ class  ResNet18(tf.keras.Model):
         :param logits: a matrix of size (num_inputs, self.num_classes); during training, this will be (batch_size, self.num_classes)
         containing the result of multiple convolution and feed forward layers
         :param labels: matrix of size (num_labels, self.num_classes) containing the answers, during training, this will be (batch_size, self.num_classes)
-
         NOTE: DO NOT EDIT
-        
+
         :return: the accuracy of the model as a Tensor
         """
         correct_predictions = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
@@ -131,14 +129,14 @@ class  ResNet18(tf.keras.Model):
 
 def train(model, dir_name_train):
     '''
-    Trains the model on all of the inputs and labels for one epoch. You should shuffle your inputs 
+    Trains the model on all of the inputs and labels for one epoch. You should shuffle your inputs
     and labels - ensure that they are shuffled in the same order using tf.gather.
     To increase accuracy, you may want to use tf.image.random_flip_left_right on your
     inputs before doing the forward pass. You should batch your inputs.
     :param model: the initialized model to use for the forward pass and backward pass
-    :param train_inputs: train inputs (all inputs to use for training), 
+    :param train_inputs: train inputs (all inputs to use for training),
     shape (num_inputs, width, height, num_channels)
-    :param train_labels: train labels (all labels to use for training), 
+    :param train_labels: train labels (all labels to use for training),
     shape (num_labels, num_classes)
     :return: Optionally list of losses per batch to use for visualize_loss
     '''
@@ -147,7 +145,6 @@ def train(model, dir_name_train):
     dataset.map(map_func=load_and_process_image,num_parallel_calls = 8)
     dataset = dataset.batch(model.batch_size,drop_remainder=True)
     dataset = dataset.prefecth(1)
-    
    labels = get_labels ()
     for i, batch in enumerate(dataset):
         with tf.GradientTape() as tape:
@@ -158,9 +155,9 @@ def train(model, dir_name_train):
 
 def test(model, dir_name_test):
     """
-    Tests the model on the test inputs and labels. You should NOT randomly 
+    Tests the model on the test inputs and labels. You should NOT randomly
     flip images or do any extra preprocessing.
-    :param test_inputs: test data (all images to be tested), 
+    :param test_inputs: test data (all images to be tested),
     shape (num_inputs, width, height, num_channels)
     :param test_labels: test labels (all corresponding labels),
     shape (num_labels, num_classes)
@@ -178,23 +175,23 @@ def test(model, dir_name_test):
         logits = model.call(batch,is_testing = True)
         accuracy = model.accuracy(logits,test_labels)
         print("test accuracy",accuracy)
-        total_accuracy+=accuracy 
+        total_accuracy+=accuracy
     average_accuracy = total_accuracy/(i+1)
-    return average_accuracy 
+    return average_accuracy
 
 
 def main():
     '''
-    Read in CIFAR10 data (limited to 2 classes), initialize your model, and train and 
+    Read in CIFAR10 data (limited to 2 classes), initialize your model, and train and
     test your model for a number of epochs. We recommend that you train for
-    10 epochs and at most 25 epochs. 
-    
-    CS1470 students should receive a final accuracy 
+    10 epochs and at most 25 epochs.
+
+    CS1470 students should receive a final accuracy
     on the testing examples for cat and dog of >=70%.
-    
-    CS2470 students should receive a final accuracy 
+
+    CS2470 students should receive a final accuracy
     on the testing examples for cat and dog of >=75%.
-    
+
     :return: None
     '''
     model = ResNet18()
@@ -203,8 +200,8 @@ def main():
     test_dir =""
     for i in range(num_epochs):
         model.train(train_dir)
-        accuarcy = model.test(test_dir) 
-    print("accuarcy after 10 epochs:",accuaracy)   
+        accuarcy = model.test(test_dir)
+    print("accuarcy after 10 epochs:",accuaracy)
     return
 
 
