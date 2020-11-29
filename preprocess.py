@@ -34,21 +34,12 @@ def get_data():
     for datum in test_iter:
         test_images.append(datum["image"])
         test_labels.append(datum["label"])
-<<<<<<< Updated upstream
     norm_factor = 1/255
     train_images = np.array(train_images,dtype=np.float32)*norm_factor
     train_images = train_images
     train_labels = np.array(train_labels)
     test_images = np.array(test_images,dtype=np.float32)*norm_factor
     test_images = test_images
-=======
-    norm_factor =1/255
-    train_images = np.array(train_images,dtype=np.float32)*norm_factor 
-    train_labels = np.array(train_labels)
-    test_images = np.array(test_images,dtype=np.float32)*norm_factor 
->>>>>>> Stashed changes
-    test_labels = np.array(test_labels)
->>>>>>> Stashed changes
 
 def get_data(file_path, num_classes, classes):
 	#Given a file path and num_classes, classes which is a list of  indexes indicating the classes 
