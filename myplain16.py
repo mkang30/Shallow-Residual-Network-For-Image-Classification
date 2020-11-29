@@ -130,6 +130,7 @@ class  Plain16(tf.keras.Model):
         self.relu = tf.keras.layers.ReLU()
         self.pool_layer_1 = tf.keras.layers.AveragePooling2D(pool_size=1, strides=1,padding='same')
 
+<<<<<<< Updated upstream
         #self.upsample = tf.keras.layers.UpSampling2D(size=[7,7])
         self.block_1_1 =  tf.keras.layers.Conv2D(16,3,padding = "same")
         self.block_1_2 = tf.keras.layers.Conv2D(16,3,padding = "same")#224x224x64
@@ -154,6 +155,27 @@ class  Plain16(tf.keras.Model):
         self.pool_5 = tf.keras.layers.MaxPool2D(strides=[2,2]) #7x7x512
         self.flat = tf.keras.layers.Flatten()
         self.ave_pool = tf.keras.layers.AveragePooling2D()
+=======
+        self.block_1_1 = tf.keras.layers.Conv2D(16,3,padding="same",activation="relu")#224x224x64
+        self.block_1_2 = tf.keras.layers.Conv2D(16,3,padding = "same", activation="relu")#224x224x64
+        self.pool_1 = tf.keras.layers.MaxPool2D(strides=[2,2]) #112x112x64
+        self.block_2_1 = tf.keras.layers.Conv2D(32,3,padding="same",activation="relu")#112x112x128
+        self.block_2_2 = tf.keras.layers.Conv2D(32,3,padding="same",activation="relu")#112x112x128
+        self.pool_2 = tf.keras.layers.MaxPool2D(strides=[2,2]) #56x56x128
+        self.block_3_1 =tf.keras.layers.Conv2D(64,3,padding="same",activation="relu") #56x56x256
+        self.block_3_2 =tf.keras.layers.Conv2D(64,3,padding="same",activation="relu") #56x56x256
+        self.block_3_3 =tf.keras.layers.Conv2D(64,3,padding="same",activation="relu") #56x56x256
+        self.pool_3 = tf.keras.layers.MaxPool2D(strides=[2,2]) #28x28x256
+        self.block_4_1 = tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #28x28x512
+        self.block_4_2 = tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #28x28x512
+        self.block_4_3 = tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #28x28x512
+        self.pool_4 = tf.keras.layers.MaxPool2D(strides=[2,2]) #14x14x512
+        self.block_5_1 = tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #14x14x512
+        self.block_5_2 =tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #14x14x512
+        self.block_5_3 =tf.keras.layers.Conv2D(128,3,padding="same",activation="relu") #14x14x512
+        self.pool_5 = tf.keras.layers.MaxPool2D(strides=[2,2]) #7x7x512
+        self.flat = tf.keras.layers.Flatten()
+>>>>>>> Stashed changes
         self.dense_1 = tf.keras.layers.Dense(512,activation="relu")
         self.dense_2 = tf.keras.layers.Dense(512,activation="relu")
         self.final = tf.keras.layers.Dense(self.num_classes,activation='softmax')
