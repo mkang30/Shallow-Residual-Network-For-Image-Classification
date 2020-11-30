@@ -2,6 +2,8 @@ import tensorflow as tf
 import numpy as np
 from preprocess import get_data
 from myplain16 import Plain16
+from ResBlock import ResBlock
+from resnet import ResNet18
 
 import random
 
@@ -35,7 +37,7 @@ def test(model, test_inputs, test_labels):
     return accum/(np.floor(len(test_inputs)/model.batch_size))
 
 def main():
-    model = Plain16()
+    model = ResNet18()
     train_images, train_labels, test_images, test_labels = get_data()
     for i in range(25):
         print(i)
