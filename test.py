@@ -112,7 +112,7 @@ def test(model, test_inputs, test_labels):
     return accum/(np.floor(len(test_inputs)/model.batch_size))
 
 def main():
-    model = ResNet18()
+    model = ResNet32()
     train_images, train_labels, test_images, test_labels = get_data()
     accuracy_list =[]
     num_epochs = 20
