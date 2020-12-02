@@ -10,9 +10,10 @@ class  ResNet18(tf.keras.Model):
         """
         super(ResNet18, self).__init__()
 
-        self.batch_size = 50
+        self.batch_size = 100
         self.num_classes = 10
         self.normal_epsilon = 1e-3
+        self.loss_list =[]
 
 
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
@@ -49,9 +50,9 @@ class  ResNet18(tf.keras.Model):
         #print("block_1_out.shape",block_1_out.get_shape().as_list())
         block_2_out = self.res_block_2_3(self.res_block_2_2(self.res_block_2_1(block_1_out)))
         block_3_out = self.res_block_3_3(self.res_block_3_2(self.res_block_3_1(block_2_out)))
-        block_4_out = self.res_block_4_3(self.res_block_4_2(self.res_block_4_1(block_3_out)))
-        block_5_out = self.res_block_5_3(self.res_block_5_2(self.res_block_5_1(block_4_out)))
-        flat_out = self.flat(block_5_out)
+        #block_4_out = self.res_block_4_3(self.res_block_4_2(self.res_block_4_1(block_3_out)))
+        #block_5_out = self.res_block_5_3(self.res_block_5_2(self.res_block_5_1(block_4_out)))
+        flat_out = self.flat(block_3_out)
 
         dense_1_out = self.dense_1(flat_out)
         if(is_testing==False):
@@ -64,7 +65,9 @@ class  ResNet18(tf.keras.Model):
 
     def loss(self,probs, labels):
         losses = tf.keras.losses.sparse_categorical_crossentropy(labels,probs)
+
         return tf.reduce_mean(losses)
+
     def accuracy(self,probs,labels):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))

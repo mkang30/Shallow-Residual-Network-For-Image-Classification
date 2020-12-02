@@ -16,10 +16,7 @@ class ResBlock(tf.keras.layers.Layer):
         """
         super(ResBlock,self).__init__()
         self.is_resampled = is_resampled
-        if stride == 2:
-            self.conv_1 = tf.keras.layers.Conv2D(out_channel,filter_size, strides=stride,padding="same",activation="relu")
-        else:
-            self.conv_1 = tf.keras.layers.Conv2D(out_channel,filter_size, strides=1,padding="same",activation="relu")
+        self.conv_1 = tf.keras.layers.Conv2D(out_channel,filter_size, strides=stride,padding="same",activation="relu")
         self.conv_2 = tf.keras.layers.Conv2D(out_channel,filter_size,strides=1, padding="same",activation="relu")
 
     def call(self, inputs):
