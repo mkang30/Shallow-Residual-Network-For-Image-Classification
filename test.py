@@ -12,7 +12,9 @@ def train(model, train_inputs, train_labels):
     indices = tf.random.shuffle(indices)
     inputs = tf.gather(train_inputs, indices)
     labels = tf.gather(train_labels, indices)
-    dataset = tf.data.Dataset.from_tensor_slices((inputs,labels)).batch(model.batch_size,drop_remainder=True)
+    dataset = tf.data.Dataset.from_tensor_slices((inputs,labels))
+    dataset = dataset.interleave(lambda x,y: tf.data.Dataset.from_tensors((x,y)), num_parallel_calls=3)
+    dataset = dataset.batch(model.batch_size,drop_remainder=True)
     dataset = dataset.prefetch(1)
 
     for i,(batch_inputs,batch_labels) in enumerate(dataset):
@@ -27,9 +29,9 @@ def train(model, train_inputs, train_labels):
 
 def test(model, test_inputs, test_labels):
     accum = 0
-    for i in range(0,len(test_inputs)-model.batch_size,model.batch_size):
-        batch_inputs = test_inputs[i:i+model.batch_size]
-        batch_labels = test_labels[i:i+model.batch_size]
+    dataset = tf.data.Dataset.from_tensor_slices((test_inputs,test_labels)).batch(model.batch_size,drop_remainder=True)
+    dataset = dataset.prefetch(1)
+    for i,(batch_inputs,batch_labels) in enumerate(dataset):
         probs = model.call(batch_inputs,is_testing=True)
         acc = model.accuracy(probs,batch_labels).numpy().item()
         print("accuaracy=",acc)

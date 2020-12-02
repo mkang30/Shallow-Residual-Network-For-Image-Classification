@@ -45,7 +45,7 @@ class  ResNet18(tf.keras.Model):
         after_conv = self.block_1(images)
         #print(" after_conv.shape",after_conv.get_shape().as_list())
         block_1_out = self.pool_1(self.bn(after_conv))
-        #block_1_out = self.pool_1(self.bn(self.block_1(images)))
+        block_1_out = self.pool_1(self.bn(self.block_1(images)))
         #print("block_1_out.shape",block_1_out.get_shape().as_list())
         block_2_out = self.res_block_2_3(self.res_block_2_2(self.res_block_2_1(block_1_out)))
         block_3_out = self.res_block_3_3(self.res_block_3_2(self.res_block_3_1(block_2_out)))
