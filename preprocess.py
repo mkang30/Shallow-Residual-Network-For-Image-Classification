@@ -30,9 +30,9 @@ def get_data():
     for datum in test_iter:
         test_images.append(datum["image"])
         test_labels.append(datum["label"])
-    train_images = np.array(train_images,dtype=np.float32)
+    train_images = np.array(train_images,dtype=np.float32)/255
     train_labels = np.array(train_labels)
-    test_images = np.array(test_images,dtype=np.float32)
+    test_images = np.array(test_images,dtype=np.float32)/255
     test_labels = np.array(test_labels)
 
     return train_images, train_labels, test_images, test_labels
