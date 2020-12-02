@@ -128,8 +128,7 @@ class  ResNet32(tf.keras.Model):
         block_1_out = self.res_block_1_5(self.res_block_1_4(self.res_block_1_3(self.res_block_1_2(self.res_block_1_1(conv_0_out)))))
         block_2_out = self.res_block_2_5(self.res_block_2_4(self.res_block_2_3(self.res_block_2_2(self.res_block_2_1(block_1_out)))))
         block_3_out = self.res_block_3_5(self.res_block_3_4(self.res_block_3_3(self.res_block_3_2(self.res_block_3_1(block_2_out)))))
-        after_pool = self.flat(self.ave_pool_layer(block_3_out))
-        flat_out = self.flat(after_pool)
+        flat_out = self.flat(self.ave_pool_layer(block_3_out))
         final = self.final(flat_out)
         return final
 
