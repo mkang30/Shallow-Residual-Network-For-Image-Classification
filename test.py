@@ -4,6 +4,7 @@ from preprocess import get_data
 from myplain16 import Plain16
 from ResBlock import ResBlock
 from resnet import ResNet18
+from resnet import ResNet32
 from matplotlib import pyplot as plt
 
 import random
