@@ -20,7 +20,8 @@ class ResBlock(tf.keras.layers.Layer):
         self.conv_2 = tf.keras.layers.Conv2D(filter_size_2,3,padding="same",activation="relu")
         self.conv_res = None
         if(is_resampled):
-            self. conv_res = tf.keras.layers.Conv2D(filter_size_2,1,strides=[1,1],padding="valid")
+            #use zero padding
+            self.conv_res = tf.keras.layers.Conv2D(filter_size_2,1,strides=[1,1],padding="valid")
 
     def call(self, inputs):
         conv_1_out = self.bn(self.conv_1(inputs))
