@@ -13,7 +13,6 @@ class Plain16(tf.keras.Model):
 
         self.batch_size = 50
         self.num_classes = 10
-        self.normal_epsilon = 1e-3
         self.epochs = 20
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
@@ -57,11 +56,6 @@ class Plain16(tf.keras.Model):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))
 
-    def bn(self, inp):
-        mean, variance = tf.nn.moments(inp,[0,1,2])
-        output = tf.nn.batch_normalization(inp,mean, variance,0,1,self.normal_epsilon)
-        return output
-
 class Plain34(tf.keras.Model):
     def __init__(self):
         """
@@ -73,7 +67,6 @@ class Plain34(tf.keras.Model):
 
         self.batch_size = 50
         self.num_classes = 10
-        self.normal_epsilon = 1e-3
         self.epochs = 50
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
@@ -105,11 +98,7 @@ class Plain34(tf.keras.Model):
     def loss(self,probs, labels):
         losses = tf.keras.losses.sparse_categorical_crossentropy(labels,probs)
         return tf.reduce_mean(losses)
+
     def accuracy(self,probs,labels):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))
-
-    def bn(self, inp):
-        mean, variance = tf.nn.moments(inp,[0,1,2])
-        output = tf.nn.batch_normalization(inp,mean, variance,0,1,self.normal_epsilon)
-        return output
