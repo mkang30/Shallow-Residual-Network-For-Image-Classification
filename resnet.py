@@ -10,7 +10,7 @@ class  ResNet20(tf.keras.Model):
         """
         super(ResNet20, self).__init__()
 
-        self.batch_size = 100
+        self.batch_size = 128
         self.num_classes = 10
         self.normal_epsilon = 1e-3
         self.loss_list =[]
@@ -72,7 +72,7 @@ class  ResNet32(tf.keras.Model):
         """
         super(ResNet32, self).__init__()
 
-        self.batch_size = 100
+        self.batch_size = 128
         self.num_classes = 10
         self.normal_epsilon = 1e-3
         self.loss_list =[]

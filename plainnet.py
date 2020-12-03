@@ -10,7 +10,7 @@ class  Plain20(tf.keras.Model):
         """
         super(Plain20, self).__init__()
 
-        self.batch_size = 100
+        self.batch_size = 128
         self.num_classes = 10
         self.normal_epsilon = 1e-3
         self.loss_list =[]
@@ -62,7 +62,7 @@ class  Plain32(tf.keras.Model):
         """
         super(Plain32, self).__init__()
 
-        self.batch_size = 100
+        self.batch_size = 128
         self.num_classes = 10
         self.normal_epsilon = 1e-3
         self.loss_list =[]
