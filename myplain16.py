@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 from ResBlock import BlockWrapper
 
-class BlockWrapper()
 class  Plain16(tf.keras.Model):
     def __init__(self):
         """
