@@ -2,13 +2,13 @@ import tensorflow as tf
 import numpy as np
 from ResBlock import ResBlock
 
-class  ResNet18(tf.keras.Model):
+class  ResNet20(tf.keras.Model):
     def __init__(self):
         """
         This model implements a plain CNN with 16 layers
         Implementation fo the VGG-16
         """
-        super(ResNet18, self).__init__()
+        super(ResNet20, self).__init__()
 
         self.batch_size = 100
         self.num_classes = 10
@@ -31,13 +31,8 @@ class  ResNet18(tf.keras.Model):
         self.res_block_4_1 = ResBlock(3,64,2,is_resampled=True)
         self.res_block_4_2 = ResBlock(3,64,1)
         self.res_block_4_3 = ResBlock(3,64,1)
-        self.res_block_5_1 = ResBlock(3,128,2,is_resampled=True)
-        self.res_block_5_2 = ResBlock(3,128,1)
-        self.res_block_5_3 = ResBlock(3,128,1)
         self.ave_pool_layer = tf.keras.layers.AveragePooling2D(strides=[2,2])
         self.flat = tf.keras.layers.Flatten()
-        self.dense_1 = tf.keras.layers.Dense(512,activation="relu")
-        self.dense_2 = tf.keras.layers.Dense(256,activation="relu")
         self.final = tf.keras.layers.Dense(self.num_classes, activation="softmax")
 
 
@@ -50,17 +45,8 @@ class  ResNet18(tf.keras.Model):
         #print("block_1_out.shape",block_1_out.get_shape().as_list())
         block_2_out = self.res_block_2_3(self.res_block_2_2(self.res_block_2_1(block_1_out)))
         block_3_out = self.res_block_3_3(self.res_block_3_2(self.res_block_3_1(block_2_out)))
-        #block_4_out = self.res_block_4_3(self.res_block_4_2(self.res_block_4_1(block_3_out)))
-        #block_5_out = self.res_block_5_3(self.res_block_5_2(self.res_block_5_1(block_4_out)))
-        flat_out = self.flat(block_3_out)
-
-        dense_1_out = self.dense_1(flat_out)
-        if(is_testing==False):
-            dense_1_out = tf.nn.dropout(dense_1_out, 0.3)
-        dense_2_out = self.dense_2(dense_1_out)
-        if(is_testing==False):
-            dense_2_out = tf.nn.dropout(dense_2_out, 0.3)
-        final = self.final(dense_2_out)
+        flat_out = self.flat(self.ave_pool_layer(block_3_out))
+        final = self.final(flat_out)
         return final
 
     def loss(self,probs, labels):
