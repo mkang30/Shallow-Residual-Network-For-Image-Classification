@@ -5,9 +5,11 @@ from myplain16 import Plain16
 from ResBlock import ResBlock
 from resnet import ResNet18
 from resnet import ResNet32
+import matplotlib 
 from matplotlib import pyplot as plt
 
 import random
+
 
 def visualize_loss_accuracy(losses,accuracy): 
     """
@@ -19,6 +21,7 @@ def visualize_loss_accuracy(losses,accuracy):
 
     :return: doesn't return anything, a plot should pop-up 
     """
+    
     x1 = [i for i in range(len(losses))]
     plot1 = plt.figure(1)
     plt.plot(x1, losses)
@@ -31,6 +34,8 @@ def visualize_loss_accuracy(losses,accuracy):
     plt.title('Accuracy per epoch')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
+    plot1.savefig('loss.png')
+    plot2.savefig('accuracy.png')
     plt.show()
 
 def visualize_results(image_inputs, probabilities, image_labels, first_label, second_label):
@@ -116,7 +121,8 @@ def main():
     model = ResNet32()
     train_images, train_labels, test_images, test_labels = get_data()
     accuracy_list =[]
-    num_epochs = 20
+    matplotlib.use('Agg')
+    num_epochs = 100
     for i in range(num_epochs):
         print(i)
         train(model,train_images,train_labels)
