@@ -8,3 +8,6 @@
 
 
 12.2 resnet20 acheives 0.8231999981403351fter 50 epochs.  The hyperparateters are 16,32,64
+
+12.2 plain20 acheives 0.813999997973442 after 50 epochs  16,32,64
+12.2 plain32 acheives 0.7877999949455261 after 50 epochs  16,32,64 

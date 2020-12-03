@@ -65,7 +65,7 @@ class  Plain32(tf.keras.Model):
         self.batch_size = 100
         self.num_classes = 10
         self.normal_epsilon = 1e-3
-         self.loss_list =[]
+        self.loss_list =[]
 
 
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
