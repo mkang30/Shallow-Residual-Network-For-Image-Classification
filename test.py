@@ -4,7 +4,7 @@ from preprocess import get_data
 from myplain16 import Plain16
 from myplain16 import Plain32
 from ResBlock import ResBlock
-from resnet import ResNet18
+from resnet import ResNet20
 from resnet import ResNet32
 import matplotlib 
 from matplotlib import pyplot as plt

@@ -95,7 +95,7 @@ class  Plain32(tf.keras.Model):
         #input should be 32*32*16
         self.block_2 = BlockWrapper(32,3,10,2)
         #input should be 16*16*64
-        self.block_2 = BlockWrapper(64,3,10,2)
+        self.block_3 = BlockWrapper(64,3,10,2)
         ##input should be 8*8*64
         self.ave_pool_layer = tf.keras.layers.AveragePooling2D(strides=[2,2])
         self.flat = tf.keras.layers.Flatten()

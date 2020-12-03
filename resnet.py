@@ -45,7 +45,8 @@ class  ResNet20(tf.keras.Model):
         #print("block_1_out.shape",block_1_out.get_shape().as_list())
         block_2_out = self.res_block_2_3(self.res_block_2_2(self.res_block_2_1(block_1_out)))
         block_3_out = self.res_block_3_3(self.res_block_3_2(self.res_block_3_1(block_2_out)))
-        flat_out = self.flat(self.ave_pool_layer(block_3_out))
+        block_4_out = self.res_block_4_3(self.res_block_4_2(self.res_block_4_1(block_3_out)))
+        flat_out = self.flat(self.ave_pool_layer(block_4_out))
         final = self.final(flat_out)
         return final
 

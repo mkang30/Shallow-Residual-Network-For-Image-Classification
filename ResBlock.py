@@ -63,5 +63,13 @@ class BlockWrapper(tf.keras.layers.Layer):
     def call(self,inputs):
         output = inputs
         for i in range(len(self.layers)):
-            output = bn(self.layers[i](output))
+            output = self.bn(self.layers[i](output))
         return output
+    def bn(self, inp):
+        """
+        This function performs batch normalization
+        """
+        mean, variance = tf.nn.moments(inp,[0,1,2])
+        output = tf.nn.batch_normalization(inp,mean, variance,0,1,1e-3)
+        return output
+    
