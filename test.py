@@ -87,7 +87,7 @@ def train(model, train_inputs, train_labels):
     inputs = tf.gather(train_inputs, indices)
     labels = tf.gather(train_labels, indices)
     dataset = tf.data.Dataset.from_tensor_slices((inputs,labels))
-    dataset = dataset.interleave(lambda x,y: tf.data.Dataset.from_tensors((x,y)), num_parallel_calls=10)
+    dataset = dataset.interleave(lambda x,y: tf.data.Dataset.from_tensors((x,y)), num_parallel_calls=3)
     dataset = dataset.batch(model.batch_size,drop_remainder=True)
     dataset = dataset.prefetch(1)
     for i,(batch_inputs,batch_labels) in enumerate(dataset):
