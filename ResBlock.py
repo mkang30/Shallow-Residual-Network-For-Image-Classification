@@ -53,7 +53,7 @@ class BlockWrapper(tf.keras.layers.Layer):
         """
         super(BlockWrapper,self).__init__()
         self.layers = []
-        if first_strides =2:
+        if first_strides ==2:
             self.layers.append(tf.keras.layers.Conv2D(filter_size,kernel_size,strides =2, padding="same",activation="relu"))
         else:
             self.layers.append(tf.keras.layers.Conv2D(filter_size,kernel_size,padding="same",activation="relu"))
