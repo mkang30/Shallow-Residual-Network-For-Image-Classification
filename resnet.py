@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from ResBlock import ResBlock
+from block import ResBlock
 
 class  ResNet20(tf.keras.Model):
     def __init__(self):
