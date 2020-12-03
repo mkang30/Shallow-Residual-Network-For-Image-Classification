@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 from preprocess import get_data
 from myplain16 import Plain16
+from myplain16 import Plain32
 from ResBlock import ResBlock
 from resnet import ResNet18
 from resnet import ResNet32
@@ -118,7 +119,7 @@ def test(model, test_inputs, test_labels):
     return accum/(np.floor(len(test_inputs)/model.batch_size))
 
 def main():
-    model = ResNet32()
+    model = Plain32()
     train_images, train_labels, test_images, test_labels = get_data()
     accuracy_list =[]
     matplotlib.use('Agg')

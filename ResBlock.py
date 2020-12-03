@@ -43,3 +43,25 @@ class ResBlock(tf.keras.layers.Layer):
         mean, variance = tf.nn.moments(inp,[0,1,2])
         output = tf.nn.batch_normalization(inp,mean, variance,0,1,1e-3)
         return output
+    
+class BlockWrapper(tf.keras.layers.Layer):
+    def __init__(self, filter_size, kernel_size, num_layers, first_strides =1):
+        """
+        This class is a plain block that initializes and forward passes
+        through 3x3, stride = (1,1), activation = relu, padding = same
+        convolutoinal layers that don't change dimensionality
+        """
+        super(BlockWrapper,self).__init__()
+        self.layers = []
+        if first_strides =2:
+            self.layers.append(tf.keras.layers.Conv2D(filter_size,kernel_size,strides =2, padding="same",activation="relu"))
+        else:
+            self.layers.append(tf.keras.layers.Conv2D(filter_size,kernel_size,padding="same",activation="relu"))
+        for i in range(num_layers-1):
+            self.layers.append(tf.keras.layers.Conv2D(filter_size,kernel_size,padding="same",activation="relu"))
+
+    def call(self,inputs):
+        output = inputs
+        for i in range(len(self.layers)):
+            output = bn(self.layers[i](output))
+        return output
