@@ -8,6 +8,7 @@ from resnet import ResNet20
 from resnet import ResNet32
 import matplotlib 
 from matplotlib import pyplot as plt
+import math
 
 import random
 
@@ -39,7 +40,7 @@ def visualize_loss_accuracy(losses,accuracy):
     plot2.savefig('accuracy.png')
     plt.show()
 
-def visualize_results(image_inputs, probabilities, image_labels, first_label, second_label):
+def visualize_results(image_inputs, probabilities, image_labels, label_names):
     """
     Uses Matplotlib to visualize the correct and incorrect results of our model.
     :param image_inputs: image data from get_data(), limited to 50 images, shape (50, 32, 32, 3)
@@ -58,18 +59,19 @@ def visualize_results(image_inputs, probabilities, image_labels, first_label, se
         nc = 10
         nr = math.ceil(len(image_indices) / 10)
         fig = plt.figure()
-        fig.suptitle("{} Examples\nPL = Predicted Label\nAL = Actual Label".format(label))
+        fig.suptitle("{} Examples\nPL = Predicted Label\nAL = Actual Label\n Labels indexes= 0:{},1:{},2:{},3:{},4:{}\n5:{},6:{},7:{},8:{},9:{}".format(label,label_names["0"],label_names["1"],label_names["2"],label_names["3"],label_names["4"],label_names["5"],label_names["6"],label_names["7"],label_names["8"],label_names["9"]))
         for i in range(len(image_indices)):
             ind = image_indices[i]
+            #plt.subplots_adjust(left=None, bottom=None, right=None, top=None,wspace=1, hspace=1)
             ax = fig.add_subplot(nr, nc, i+1)
             ax.imshow(image_inputs[ind], cmap="Greys")
-            pl = first_label if predicted_labels[ind] == 0.0 else second_label
-            al = first_label if np.argmax(
-                image_labels[ind], axis=0) == 0 else second_label
-            ax.set(title="PL: {}\nAL: {}".format(pl, al))
+            pl = np.argmax(probabilities[ind]).astype(int)
+            al = image_labels[ind]
+            ax.set(title="PL: {}\n AL: {}".format(pl, al))
             plt.setp(ax.get_xticklabels(), visible=False)
             plt.setp(ax.get_yticklabels(), visible=False)
             ax.tick_params(axis='both', which='both', length=0)
+        fig.savefig(label+".png")
         
     predicted_labels = np.argmax(probabilities, axis=1)
     num_images = image_inputs.shape[0]
@@ -78,7 +80,7 @@ def visualize_results(image_inputs, probabilities, image_labels, first_label, se
     correct = []
     incorrect = []
     for i in range(num_images): 
-        if predicted_labels[i] == np.argmax(image_labels[i], axis=0): 
+        if predicted_labels[i] == image_labels[i]: 
             correct.append(i)
         else: 
             incorrect.append(i)
@@ -124,6 +126,7 @@ def main():
     accuracy_list =[]
     matplotlib.use('Agg')
     num_epochs = 50
+    label_names ={"0":"airplane","1": "automobile","2":"bird","3":"cat","4": "deer","5":"dog","6":"frog","7":"horse","8":"ship","9":"truck"}
     for i in range(num_epochs):
         print(i)
         train(model,train_images,train_labels)
@@ -131,5 +134,7 @@ def main():
         accuracy_list.append(test_accuracy)
         print(test_accuracy)
     visualize_loss_accuracy(model.loss_list,accuracy_list)
+    visualize_results(test_images[0:10], model(test_images), test_labels[0:10],label_names)
+
 if __name__ == '__main__':
     main()
