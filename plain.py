@@ -67,7 +67,7 @@ class Plain34(tf.keras.Model):
 
         self.batch_size = 50
         self.num_classes = 10
-        self.epochs = 50
+        self.epochs = 30
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
         self.block_1 = Block(64,6)
@@ -79,7 +79,6 @@ class Plain34(tf.keras.Model):
         self.block_4 = Block(512,6)
         #avg_pool
         self.flat = tf.keras.layers.Flatten()
-        self.dense_1 = tf.keras.layers.Dense(1024,activation="relu")
         self.final = tf.keras.layers.Dense(self.num_classes, activation="softmax")
 
 
@@ -89,10 +88,7 @@ class Plain34(tf.keras.Model):
         block_3_out = tf.nn.avg_pool2d(self.block_3.call(block_2_out),2,2, "VALID")
         block_4_out = tf.nn.avg_pool2d(self.block_4.call(block_3_out),2,2, "VALID")
         flat_out = self.flat(block_4_out)
-        dense_1_out = self.dense_1(flat_out)
-        if(is_testing==False):
-            dense_1_out = tf.nn.dropout(dense_1_out, 0.3)
-        final = self.final(dense_1_out)
+        final = self.final(flat_out)
         return final
 
     def loss(self,probs, labels):
