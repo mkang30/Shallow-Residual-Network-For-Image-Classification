@@ -104,7 +104,7 @@ class ResNet34(tf.keras.Model):
         self.res_block_4_3 = ResBlock(512,512)
         #avg_pool
 
-        self.flat = tf.keras.layers.Flatten();
+        self.flat = tf.keras.layers.Flatten()
         self.final = tf.keras.layers.Dense(self.num_classes, activation="softmax")
 
     def call(self,images,is_testing=False):

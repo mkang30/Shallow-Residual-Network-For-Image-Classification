@@ -129,7 +129,7 @@ def main():
         accuracy_list.append(test_accuracy)
         print(test_accuracy)
     visualize_loss_accuracy(model.loss_list,accuracy_list)
-    visualize_results(test_images[0:10], model(test_images), test_labels[0:10],label_names)
+    visualize_results(test_images[0:10], model(test_images[0:10]), test_labels[0:10],label_names)
 
 if __name__ == '__main__':
     main()
