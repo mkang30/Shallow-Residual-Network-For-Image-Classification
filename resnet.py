@@ -3,6 +3,7 @@ import numpy as np
 
 from block import ResBlock
 
+
 class ResNet16(tf.keras.Model):
     def __init__(self):
         """
@@ -18,6 +19,7 @@ class ResNet16(tf.keras.Model):
         self.normal_epsilon = 1e-3
         self.epochs = 20
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+        self.loss_list = []
 
         self.res_block_1 = ResBlock(64,64,is_resampled=True)
         #maxpool
@@ -70,7 +72,7 @@ class ResNet34(tf.keras.Model):
     def __init__(self):
         """
         This model is a Residual Neural Network with  layers.
-        The structure is the same as the Plain17 with the only
+        The structure is the same as the Plain34 with the only
         difference of skip connections wih the identity function.
         """
         super(ResNet34, self).__init__()
@@ -78,7 +80,7 @@ class ResNet34(tf.keras.Model):
         self.batch_size = 50
         self.num_classes = 10
         self.normal_epsilon = 1e-3
-        self.epochs = 50
+        self.epochs = 30
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
         self.res_block_1_1 = ResBlock(64,64,is_resampled=True)
@@ -102,8 +104,7 @@ class ResNet34(tf.keras.Model):
         self.res_block_4_3 = ResBlock(512,512)
         #avg_pool
 
-        self.flat = tf.keras.layers.Flatten();
-        self.dense_1 = tf.keras.layers.Dense(1024,activation="relu")
+        self.flat = tf.keras.layers.Flatten()
         self.final = tf.keras.layers.Dense(self.num_classes, activation="softmax")
 
     def call(self,images,is_testing=False):
@@ -117,10 +118,7 @@ class ResNet34(tf.keras.Model):
         block_4_out_pool = tf.nn.avg_pool2d(block_4_out,2,2, "VALID")
 
         flat_out = self.flat(block_4_out_pool)
-        dense_1_out = self.dense_1(flat_out)
-        if(is_testing==False):
-            dense_1_out = tf.nn.dropout(dense_1_out, 0.3)
-        final = self.final(dense_1_out)
+        final = self.final(flat_out)
         return final
 
 
@@ -132,8 +130,3 @@ class ResNet34(tf.keras.Model):
     def accuracy(self,probs,labels):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))
-
-    def bn(self, inp):
-        mean, variance = tf.nn.moments(inp,[0,1,2])
-        output = tf.nn.batch_normalization(inp,mean, variance,0,1,self.normal_epsilon)
-        return output

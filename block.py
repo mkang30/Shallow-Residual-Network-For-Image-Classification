@@ -26,7 +26,7 @@ class ResBlock(tf.keras.layers.Layer):
         self.filter_size_2 = filter_size_2
         self.is_resampled = is_resampled
         self.conv_1 = tf.keras.layers.Conv2D(filter_size_1,3,padding="same",activation="relu")#224x224x64
-        self.conv_2 = tf.keras.layers.Conv2D(filter_size_2,3,padding="same",activation="relu")
+        self.conv_2 = tf.keras.layers.Conv2D(filter_size_2,3,padding="same")
         self.conv_res = None
         if(is_resampled):
             #1x1 convolution acts as an identity upsampling function
@@ -40,7 +40,7 @@ class ResBlock(tf.keras.layers.Layer):
         inputs_x = inputs
         if(self.is_resampled):
             inputs_x = bn(self.conv_res(inputs))
-        return tf.nn.relu(inputs_x+conv_2_out)
+        return tf.nn.relu(bn(inputs_x+conv_2_out))
 
 
 class Block(tf.keras.layers.Layer):
@@ -54,7 +54,7 @@ class Block(tf.keras.layers.Layer):
         self.layers = []
         for i in range(num_layers):
             self.layers.append(tf.keras.layers.Conv2D(filter_size,3,padding="same",activation="relu"))
-    
+
     def call(self,inputs):
         output = inputs
         for i in range(len(self.layers)):

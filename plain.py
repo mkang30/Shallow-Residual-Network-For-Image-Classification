@@ -13,7 +13,6 @@ class Plain16(tf.keras.Model):
 
         self.batch_size = 50
         self.num_classes = 10
-        self.normal_epsilon = 1e-3
         self.epochs = 20
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
@@ -57,11 +56,6 @@ class Plain16(tf.keras.Model):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))
 
-    def bn(self, inp):
-        mean, variance = tf.nn.moments(inp,[0,1,2])
-        output = tf.nn.batch_normalization(inp,mean, variance,0,1,self.normal_epsilon)
-        return output
-
 class Plain34(tf.keras.Model):
     def __init__(self):
         """
@@ -73,8 +67,7 @@ class Plain34(tf.keras.Model):
 
         self.batch_size = 50
         self.num_classes = 10
-        self.normal_epsilon = 1e-3
-        self.epochs = 50
+        self.epochs = 30
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
         self.block_1 = Block(64,6)
@@ -86,7 +79,6 @@ class Plain34(tf.keras.Model):
         self.block_4 = Block(512,6)
         #avg_pool
         self.flat = tf.keras.layers.Flatten()
-        self.dense_1 = tf.keras.layers.Dense(1024,activation="relu")
         self.final = tf.keras.layers.Dense(self.num_classes, activation="softmax")
 
 
@@ -96,20 +88,13 @@ class Plain34(tf.keras.Model):
         block_3_out = tf.nn.avg_pool2d(self.block_3.call(block_2_out),2,2, "VALID")
         block_4_out = tf.nn.avg_pool2d(self.block_4.call(block_3_out),2,2, "VALID")
         flat_out = self.flat(block_4_out)
-        dense_1_out = self.dense_1(flat_out)
-        if(is_testing==False):
-            dense_1_out = tf.nn.dropout(dense_1_out, 0.3)
-        final = self.final(dense_1_out)
+        final = self.final(flat_out)
         return final
 
     def loss(self,probs, labels):
         losses = tf.keras.losses.sparse_categorical_crossentropy(labels,probs)
         return tf.reduce_mean(losses)
+
     def accuracy(self,probs,labels):
         correct_predictions = tf.equal(tf.argmax(probs, 1), labels)
         return tf.reduce_mean(tf.cast(correct_predictions, tf.float32))
-
-    def bn(self, inp):
-        mean, variance = tf.nn.moments(inp,[0,1,2])
-        output = tf.nn.batch_normalization(inp,mean, variance,0,1,self.normal_epsilon)
-        return output
